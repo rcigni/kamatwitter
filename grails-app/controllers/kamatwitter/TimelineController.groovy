@@ -1,12 +1,15 @@
 package kamatwitter
 
 import grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.SpringSecurityService
 
 /**
  * User: rcigni
  */
 @Secured(['ROLE_USER'])
 class TimelineController {
+
+    def springSecurityService
 
     def index() {
         redirect(action: 'show')
@@ -34,6 +37,23 @@ class TimelineController {
         def tweets = Tweet.lastTimeline(author).list()
 
         [tweets: tweets, author: author]
+    }
+
+    def tweet() {
+
+        def currentUser = User.get(springSecurityService.principal.id)
+
+        def tweetInstance = new Tweet(params)
+        tweetInstance.author = currentUser
+
+        if (!tweetInstance.save(flush: true)) {
+            chain(action: "authorTweets", model: [tweetInstance:tweetInstance], params: [username: currentUser.username])
+            return
+        }
+
+        flash.message = message(code: 'default.created.message', args: [message(code: 'tweet.label', default: 'Tweet'), tweetInstance.id])
+        redirect(action: "authorTweets", params: [username: currentUser.username])
+
     }
 
 }
