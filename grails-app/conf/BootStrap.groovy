@@ -15,7 +15,7 @@ class BootStrap {
 
         def roleUser = SecRole.findByAuthority("ROLE_USER") ?: new SecRole(authority: "ROLE_USER").save(failOnError: true)
 
-        def user = new User(
+        def max = new User(
                 username: 'max',
                 name: "Massimo",
                 surname: "D'Alema",
@@ -23,15 +23,26 @@ class BootStrap {
                 enabled: true,
         ).save(failOnError: true)
 
-        SecUserSecRole.create(user, roleUser)
+        def john = new User(
+                username: 'john',
+                name: "John",
+                surname: "Doo",
+                password: 'password',
+                enabled: true,
+        ).save(failOnError: true)
+
+        SecUserSecRole.create(max, roleUser)
+        SecUserSecRole.create(john, roleUser)
 
         def now = new Date()
+
+        def authors = [max, john]
 
         100.times {
 
             new Tweet(
                     message: "Hello World ${it}",
-                    author: user,
+                    author: authors[ it % 2 ],
                     time: now - it
             ).save(failOnError: true)
         }

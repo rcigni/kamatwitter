@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<h1>Timeline</h1>
+<h1>Timeline of Mr ${author}</h1>
 
 <g:if test="${flash.message}">
     <div class="message" role="status">${flash.message}</div>

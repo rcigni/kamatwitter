@@ -17,5 +17,18 @@ class Tweet {
         time = time ?: new Date()
     }
 
+    static namedQueries = {
+
+        lastTimeline {User author ->
+            eq 'author', author
+            lastTweets()
+        }
+
+        lastTweets {
+            maxResults(20)
+            order("time", "desc")
+        }
+    }
+
 
 }

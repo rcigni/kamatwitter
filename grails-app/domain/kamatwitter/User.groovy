@@ -10,4 +10,9 @@ class User extends SecUser {
     static constraints = {
         //surname(validator: {sn, obj-> })
     }
+
+
+    String toString() {
+        "${surname} ${name}"
+    }
 }
