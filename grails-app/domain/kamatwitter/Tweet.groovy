@@ -13,6 +13,13 @@ class Tweet {
 
     }
 
+    transient springSecurityService
+
+    def publish() {
+        author = User.get(springSecurityService.principal.id)
+        save(flush: true)
+    }
+
     def beforeInsert() {
         time = time ?: new Date()
     }

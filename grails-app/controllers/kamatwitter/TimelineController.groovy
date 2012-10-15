@@ -11,6 +11,8 @@ class TimelineController {
 
     def springSecurityService
 
+    def tweetService
+
     def index() {
         redirect(action: 'show')
     }
@@ -46,7 +48,7 @@ class TimelineController {
         def tweetInstance = new Tweet(params)
         tweetInstance.author = currentUser
 
-        if (!tweetInstance.save(flush: true)) {
+        if (!tweetService.publish(tweetInstance)) {
             chain(action: "authorTweets", model: [tweetInstance:tweetInstance], params: [username: currentUser.username])
             return
         }
